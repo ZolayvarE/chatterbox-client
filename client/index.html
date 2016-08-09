@@ -17,11 +17,13 @@
     <div id="main">
       <h1>chatterbox</h1>
       <div id='selectBox'>
-        Room Name:
-        <select id='selector' value="chat">
+        Choose an Existing Room:
+        <select id='selector'>
           <option value="chat">Show All Chats</option>
         </select>
       </div>
+      <div id='roomMakerBox'>... or Create Your Own Room!:
+      <input type="text" id="roomMaker"></input><button id='makeRoom'>Make Room</button></div>
       <div id="textBox">Enter your own message here!:</div>
       <div id='subBox'>
         <textarea rows="4" cols="0" id="submit" placeholder="You can type whatever!"></textarea>

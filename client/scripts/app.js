@@ -4,7 +4,7 @@
 // This guarantess that messages appended to the DOM aren't 
 // 100% totally stupid garbage.
 // 
-// I\'m not even frustrated.
+// I'm not even frustrated.
 var zxc = window.localStorage;
 
 if (zxc.foo === undefined) { zxc.foo = JSON.stringify({}); }
@@ -68,6 +68,16 @@ var sterilize = function (messageObject) {
     return false;
   ;}
 
+  if (messageObject.text.toUpperCase().slice(0,7) === '<SCRIPT') {
+    deliverRetribution(messageObject);
+    return false;
+  }
+
+  if (messageObject.text.toUpperCase().slice(0,4) === '<IMG') {
+    deliverRetribution(messageObject);
+    return false;
+  }
+
   if (messageObject.text.toUpperCase().indexOf('<SCRIPT') !== -1) {
     deliverRetribution(messageObject);
     return false;
@@ -121,10 +131,14 @@ var app = {
   // Should intelligently generate a message object given
   // a text string.
   _send: function (input) {
+    var room = $('#selector').val();
+    if (room === 'chat') {
+      room = 'LOBBY';
+    }
     var message = {
       username: window.location.search.slice(10),
       text: input,
-      roomname: $('#selector').val()
+      roomname: room
     };
     app.send(message);
   },
@@ -220,6 +234,29 @@ $(document).ready(function () {
     console.log(this.value);
     $('.' + this.value).css('display', 'block');
   });
+
+  var button = $('<button>Submit</button>');
+  button.css({
+    float: 'right',
+    'font-size': '12px'
+  })
+  button.click(function () {
+    var msg = $('#submit').val();
+    if (msg !== '') {
+      app._send(msg);
+      $('#submit').val('');
+    }
+  })
+  $('#main').append(button);
+
+  $('#makeRoom').click(function () {
+    if (room !== '') {
+      var room = $('#roomMaker').val().toUpperCase();
+      app.addRoom(room);
+      $('#selector').val(room.split(' ').join('_'));
+      filterRooms();
+    }
+  })
   
 })
 
@@ -228,11 +265,6 @@ var filterRooms = function () {
   $('.chat').css('display', 'none');
   $('.' + room).css('display', 'block');
 }
-
-
-
-
-
 
 //===================================================================//
 

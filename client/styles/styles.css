@@ -99,6 +99,10 @@ form input[type=text] {
     vertical-align: bottom;
 }
 
+#roomMakerBox {
+    padding-top: 10px;
+}
+
 #submit {
     width: 100%;
     height: 50px;
