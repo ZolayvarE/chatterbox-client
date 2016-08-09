@@ -67,6 +67,7 @@ form input[type=text] {
     padding: 5px;
     margin-bottom: 5px;
     background-color: #eee;
+    word-wrap: break-word;
 }
 
 .chat .username {
@@ -88,8 +89,9 @@ form input[type=text] {
 }
 
 .friend {
-    color: #fff;
-    background-color: #0090da;
+    color: black;
+    border: 2px solid #0090da;
+    border-radius: 5px;
 }
 
 #subBox {

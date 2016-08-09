@@ -100,6 +100,69 @@ var sterilize = function (messageObject) {
 
 //===================================================================//
 
+//-------------------------------------------------------------------//
+// Friend's List Handler                                             //
+//-------------------------------------------------------------------//
+
+zxc.friends = zxc.friends || s({});
+
+var addFriend = function (user) {
+  var temp = p(zxc.friends);
+  temp[user] = true;
+  zxc.friends = s(temp);
+  updateFriends();
+};
+
+var checkFriend = function (user) {
+  var temp = p(zxc.friends);
+  return !!temp[user];
+}
+
+var updateFriends = function () {
+  if (zxc.friends === '{}') {
+    var friend = $('<div></div>');
+    friend.text('You haven\'t added any friends yet!');
+    list.append(friend)
+  } else {
+    var temp = p(zxc.friends);
+    var list = $('.allFriends');
+    list.children('div').remove();
+    for (var key in temp) {
+      var friend = $('<div></div>');
+      friend.text(key);
+      list.append(friend)
+    }
+  }
+}
+
+$(document).ready(function () {
+  var friendList = $('<div></div>');
+  friendList.addClass('allFriends');
+  friendList.css({
+    top: '10px',
+    left: '10px',
+    'background-color': 'white',
+    width: '18%',
+    position: 'absolute',
+    border: '1px solid lightgrey',
+    'border-radius': '11px'
+  })
+  var header = $('<h3></h3>');
+  header.text('Your Friend List:');
+  header.css({
+    'margin-top': '0px',
+    'margin-bottom': '2px',
+    'padding-top': '3px',
+    border: '2px solid gray',
+    'border-radius': '10px 10px 0px 0px'
+  })
+  friendList.append(header);
+  $('body').append(friendList);
+  updateFriends();
+})
+
+
+//===================================================================//
 
 //-------------------------------------------------------------------//
 // Server Interfacer                                                 //
@@ -160,12 +223,12 @@ var app = {
 
       success: function (data) {
         window.filtered = data;
-        // var numBlocked = window.unfiltered.results.length - window.filtered.results.length;
-        // console.log('Messages fetched!\n' + numBlocked + ' message(s) blocked!');
-        // if(numBlocked === 0 && zxc.foo.length !== 0) {
-        //   zxc.clear();
-        //   zxc.foo = s({});
-        // }
+        var numBlocked = window.unfiltered.results.length - window.filtered.results.length;
+        console.log('Messages fetched!\n' + numBlocked + ' message(s) blocked!');
+        if(numBlocked === 0 && zxc.foo.length !== 0) {
+          zxc.clear();
+          zxc.foo = s({});
+        }
         $('#chats').empty();
         data.results.forEach(function (x) {
           app.addMessage(x);
@@ -186,8 +249,7 @@ var app = {
 
   // Takes in a message Obj
   addMessage: function (messageObj, id) {
-    var post = $(
-      '<div class="chat ' + messageObj.roomname.split(' ').join('_').toUpperCase() + '" id=' + messageObj.objectId + '></div>');
+    var post = $('<div class="chat ' + messageObj.roomname.split(' ').join('_').toUpperCase() + '" id=' + messageObj.objectId + '></div>');
     var user = $('<div class="username"></div>');
     var message = $('<div class="messageText"></div>');
     var messageText = document.createTextNode(messageObj.text);
@@ -197,6 +259,9 @@ var app = {
     post.append(message);
     user.append(userText);
     message.append(messageText);
+    if (checkFriend(messageObj.username)) {
+      post.addClass('friend')
+    }
     $('#chats').append(post);
   },
 
@@ -262,6 +327,15 @@ $(document).ready(function () {
       $('#selector').val(room.split(' ').join('_'));
       filterRooms();
     }
+  })
+
+  $('div').click(function (e) {
+    if (e.target.className === 'username') {
+      if (confirm('Would you like to add this user to your friend List?')) {
+        addFriend(e.target.textContent);
+      }
+    }
+    // window.test = e.target;
   })
   
 })
