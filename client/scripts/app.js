@@ -143,7 +143,7 @@ $(document).ready(function () {
     left: '10px',
     'background-color': 'white',
     width: '18%',
-    position: 'absolute',
+    position: 'fixed',
     border: '1px solid lightgrey',
     'border-radius': '11px'
   })
