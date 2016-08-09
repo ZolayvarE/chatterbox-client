@@ -53,45 +53,45 @@ var sterilize = function (messageObject) {
   if (messageObject.text === '') { return false; }
   
   if (messageObject.username.toUpperCase().indexOf('<SCRIPT') !== -1) {
-    messageObject.username = 'An XSSer';
-    // deliverRetribution(messageObject);
+    messageObject.username = 'Anonymous XSSer';
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.username.toUpperCase().indexOf('<IMG') !== -1) {
-    messageObject.username = 'An XSSer';
-    // deliverRetribution(messageObject);
+    messageObject.username = 'Anonymous XSSer';
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.text.toUpperCase().slice(0, 7) === '<SCRIPT') {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.text.toUpperCase().slice(0, 4) === '<IMG') {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.text.toUpperCase().indexOf('<SCRIPT') !== -1) {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.text.toUpperCase().indexOf('<IMG') !== -1) {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
  
   if (messageObject.roomname.toUpperCase().indexOf('<SCRIPT') !== -1) {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
   if (messageObject.roomname.toUpperCase().indexOf('<IMG') !== -1) {
-    // deliverRetribution(messageObject);
+    deliverRetribution(messageObject);
     return false;
   }
 
