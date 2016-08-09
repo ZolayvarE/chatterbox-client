@@ -124,7 +124,7 @@ var updateFriends = function () {
     var list = $('.allFriends');
     var friend = $('<div></div>');
     friend.text('You haven\'t added any friends yet!');
-    list.append(friend)
+    list.append(friend);
   } else {
     var temp = p(zxc.friends);
     var list = $('.allFriends');
@@ -132,10 +132,10 @@ var updateFriends = function () {
     for (var key in temp) {
       var friend = $('<div></div>');
       friend.text(key);
-      list.append(friend)
+      list.append(friend);
     }
   }
-}
+};
 
 $(document).ready(function () {
   var friendList = $('<div></div>');
@@ -148,7 +148,7 @@ $(document).ready(function () {
     position: 'fixed',
     border: '1px solid lightgrey',
     'border-radius': '11px'
-  })
+  });
   var header = $('<h3></h3>');
   header.text('Your Friend List:');
   header.css({
@@ -157,11 +157,11 @@ $(document).ready(function () {
     'padding-top': '3px',
     border: '2px solid gray',
     'border-radius': '10px 10px 0px 0px'
-  })
+  });
   friendList.append(header);
   $('body').append(friendList);
   updateFriends();
-})
+});
 
 
 //===================================================================//
@@ -227,7 +227,7 @@ var app = {
         window.filtered = data;
         var numBlocked = window.unfiltered.results.length - window.filtered.results.length;
         console.log('Messages fetched!\n' + numBlocked + ' message(s) blocked!');
-        if(numBlocked === 0 && zxc.foo.length !== 0) {
+        if (numBlocked === 0 && zxc.foo.length !== 0) {
           zxc.clear();
           zxc.foo = s({});
         }
@@ -262,7 +262,7 @@ var app = {
     user.append(userText);
     message.append(messageText);
     if (checkFriend(messageObj.username)) {
-      post.addClass('friend')
+      post.addClass('friend');
     }
     $('#chats').append(post);
   },
@@ -300,7 +300,7 @@ $(document).ready(function () {
         this.value = '';
       }
     }
-  })
+  });
 
   $('#selector').change(function () {
     $('.chat').css('display', 'none');
@@ -312,14 +312,14 @@ $(document).ready(function () {
   button.css({
     float: 'right',
     'font-size': '12px'
-  })
+  });
   button.click(function () {
     var msg = $('#submit').val();
     if (msg !== '') {
       app._send(msg);
       $('#submit').val('');
     }
-  })
+  });
   $('#main').append(button);
 
   $('#makeRoom').click(function () {
@@ -329,7 +329,7 @@ $(document).ready(function () {
       $('#selector').val(room.split(' ').join('_'));
       filterRooms();
     }
-  })
+  });
 
   $('div').click(function (e) {
     if (e.target.className === 'username') {
@@ -338,15 +338,15 @@ $(document).ready(function () {
       }
     }
     // window.test = e.target;
-  })
+  });
   
-})
+});
 
 var filterRooms = function () {
   var room = $('#selector').val();
   $('.chat').css('display', 'none');
   $('.' + room).css('display', 'block');
-}
+};
 
 //===================================================================//
 
@@ -362,7 +362,7 @@ var searchFor = function (string, obj) {
     }
   }
   return results;
-}
+};
 
 
 
