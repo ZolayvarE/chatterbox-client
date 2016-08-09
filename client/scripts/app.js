@@ -119,18 +119,24 @@ var checkFriend = function (user) {
   return !!temp[user];
 };
 
+var removeFriend = function (user) {
+  var temp = p(zxc.friends);
+  delete temp[user];
+  zxc.friends = s(temp);
+  updateFriends();
+};
+
 var updateFriends = function () {
+  var list = $('.allFriends');
+  list.children('div').remove();
   if (zxc.friends === '{}') {
-    var list = $('.allFriends');
-    var friend = $('<div></div>');
+    var friend = $('<div class="username"></div>');
     friend.text('You haven\'t added any friends yet!');
     list.append(friend);
   } else {
     var temp = p(zxc.friends);
-    var list = $('.allFriends');
-    list.children('div').remove();
     for (var key in temp) {
-      var friend = $('<div></div>');
+      var friend = $('<div class="username"></div>');
       friend.text(key);
       list.append(friend);
     }
@@ -140,15 +146,6 @@ var updateFriends = function () {
 $(document).ready(function () {
   var friendList = $('<div></div>');
   friendList.addClass('allFriends');
-  friendList.css({
-    top: '10px',
-    left: '10px',
-    'background-color': 'white',
-    width: '18%',
-    position: 'fixed',
-    border: '1px solid lightgrey',
-    'border-radius': '11px'
-  });
   var header = $('<h3></h3>');
   header.text('Your Friend List:');
   header.css({
@@ -276,9 +273,7 @@ var app = {
     }
   },
 
-  addFriend: function () {
-
-  }
+  addFriend: addFriend
 };
 //===================================================================//
 
@@ -331,13 +326,21 @@ $(document).ready(function () {
     }
   });
 
-  $('div').click(function (e) {
+  $('div').mouseup(function (e) {
     if (e.target.className === 'username') {
-      if (confirm('Would you like to add this user to your friend List?')) {
-        addFriend(e.target.textContent);
+      var user = e.target.textContent;
+      if (checkFriend(user)) {
+        if (confirm('Would you like to REMOVE this user from your friend list?')) {
+          removeFriend(user);
+        }
+      } else {
+        if (confirm('Would you like to ADD this user to your friend list?')) {
+          addFriend(user);
+        }
       }
+      // console.log(e.target);
+      // window.test = e.target;
     }
-    // window.test = e.target;
   });
   
 });

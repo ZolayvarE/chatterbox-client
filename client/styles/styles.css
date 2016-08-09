@@ -1,13 +1,12 @@
 body {
     background: #eee;
     text-align: center;
-    padding: 0 25px;
+    padding: 0px;
     font-family: arial, sans-serif;
+    margin: 0px;
 }
 
 #main, #chats {
-    width: 500px;
-    margin: auto;
     text-align: left;
     background: white;
     padding: 50px 60px;
@@ -117,3 +116,25 @@ form input[type=text] {
     padding-top: 10px;
 }
 
+#chats {
+    margin: 0px;
+    left: 577px;
+    right: 5px;
+    position: absolute;
+}
+
+#main {
+    left: 5px;
+    position: fixed;
+    width: 450px;
+}
+
+.allFriends {
+    top: 277px;
+    left: 5px;
+    background-color: white;
+    width: 283px;
+    position: fixed;
+    border: 1px solid lightgrey;
+    border-radius: 11px
+}
