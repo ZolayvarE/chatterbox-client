@@ -18,15 +18,16 @@ var deliverRetribution = function (obj) {
   if (!temp[key]) {
     temp[key] = key;
     newObj = {};
-    if (obj.username === 'Anonymous') {
-      newObj.name = "Someone coward who wouldn't name themselves"
-    } else {
-      newObj.username = obj.username;
-    }
-    newObj.roomname = obj.roomname;
+    // if (obj.username === 'Anonymous') {
+    //   newObj.name = "Someone coward who wouldn't name themselves"
+    // } else {
+    newObj.username = obj.username;
+    // }
+    newObj.roomname = 'Known XSSers';
     newObj.text = randInsult();
     app.send(newObj);
-    console.log('Wrist Slapped!')
+    console.log('Wrist Slapped!');
+    console.log(obj);
     zxc.foo = s(temp);
   }
 };
@@ -55,35 +56,35 @@ var sterilize = function (messageObject) {
   if (messageObject.username === 'Mel Brooks') { return false; }
   if (messageObject.text === '') { return false; }
   
-  if (messageObject.username.indexOf('<script') !== -1) {
+  if (messageObject.username.toUpperCase().indexOf('<SCRIPT') !== -1) {
     messageObject.username = "Someone coward who wouldn't name themselves"
     deliverRetribution(messageObject);
     return false;
   ;}
 
-  if (messageObject.username.indexOf('<img') !== -1) {
+  if (messageObject.username.toUpperCase().indexOf('<IMG') !== -1) {
     messageObject.username = "Someone coward who wouldn't name themselves"
     deliverRetribution(messageObject);
     return false;
   ;}
 
-  if (messageObject.text.indexOf('<script') !== -1) {
+  if (messageObject.text.toUpperCase().indexOf('<SCRIPT') !== -1) {
     deliverRetribution(messageObject);
     return false;
   ;}
 
-  if (messageObject.text.indexOf('<img') !== -1) {
+  if (messageObject.text.toUpperCase().indexOf('<IMG') !== -1) {
     deliverRetribution(messageObject);
     return false;
   ;}
 
  
-  if (messageObject.roomname.indexOf('<script') !== -1) {
+  if (messageObject.roomname.toUpperCase().indexOf('<SCRIPT') !== -1) {
     deliverRetribution(messageObject);
     return false;
   ;}
 
-  if (messageObject.roomname.indexOf('<img') !== -1) {
+  if (messageObject.roomname.toUpperCase().indexOf('<IMG') !== -1) {
     deliverRetribution(messageObject);
     return false;
   ;}
@@ -123,7 +124,7 @@ var app = {
     var message = {
       username: window.location.search.slice(10),
       text: input,
-      roomname: 'test'
+      roomname: $('#selector').val()
     };
     app.send(message);
   },
@@ -138,7 +139,7 @@ var app = {
  
       dataFilter: function (data, dataType) {
         var dataObject = JSON.parse(data);
-        window.test = dataObject;
+        window.unfiltered = dataObject;
         var filtered = {};
         
         filtered.results = _.filter(dataObject.results, function (x) {
@@ -148,10 +149,13 @@ var app = {
       },
 
       success: function (data) {
+        console.log('Messages fetched!');
+        window.filtered = data;
         $('#chats').empty();
         data.results.forEach(function (x) {
           app.addMessage(x);
         });
+        filterRooms();
       },
     
       error: function (data) {
@@ -167,7 +171,8 @@ var app = {
 
   // Takes in a message Obj
   addMessage: function (messageObj, id) {
-    var post = $('<div class="chat" id=' + messageObj.objectId + '></div>');
+    var post = $(
+      '<div class="chat ' + messageObj.roomname.split(' ').join('_').toUpperCase() + '" id=' + messageObj.objectId + '></div>');
     var user = $('<div class="username">' + messageObj.username + '</div>');
     var message = $('<div class="messageText">' + messageObj.text + '</div>');
     app.addRoom(messageObj.roomname);
@@ -200,9 +205,29 @@ $(document).ready(function () {
   window.grabMessages = setInterval(function () {
     return app.fetch();
   }, 3000);
+
+  $('#submit').keypress(function (e) {
+    if (e.which === 13) {
+      if (this.value !== '') {
+        app._send(this.value);
+        this.value = '';
+      }
+    }
+  })
+
+  $('#selector').change(function () {
+    $('.chat').css('display', 'none');
+    console.log(this.value);
+    $('.' + this.value).css('display', 'block');
+  });
+  
 })
 
-
+var filterRooms = function () {
+  var room = $('#selector').val();
+  $('.chat').css('display', 'none');
+  $('.' + room).css('display', 'block');
+}
 
 
 
@@ -210,3 +235,22 @@ $(document).ready(function () {
 
 
 //===================================================================//
+
+
+
+
+var searchFor = function (string, obj) {
+  var all = obj.results;
+  var results = [];
+  for (var i = 0; i < all.length; i++) {
+    if (all[i].text !== undefined && all[i].text.indexOf(string) !== -1) {
+      results.push(all[i]);
+    }
+  }
+  return results;
+}
+
+
+
+
+

@@ -92,8 +92,18 @@ form input[type=text] {
 
 #subBox {
     padding: 0px;
-    padding-top: 10px;
+    padding-bottom: 8px;
     margin: 0px;
     vertical-align: bottom;
+}
+
+#submit {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+}
+
+#textBox {
+    padding-top: 10px;
 }
 
