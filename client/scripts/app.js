@@ -16,13 +16,9 @@ var deliverRetribution = function (obj) {
   var key = obj.username + '' + obj.objectId;
   var temp = p(zxc.foo);
   if (!temp[key]) {
-    temp[key] = key;
+    temp[key] = true;
     newObj = {};
-    // if (obj.username === 'Anonymous') {
-    //   newObj.name = "Someone coward who wouldn't name themselves"
-    // } else {
     newObj.username = obj.username;
-    // }
     newObj.roomname = 'Known XSSers';
     newObj.text = randInsult();
     app.send(newObj);
@@ -163,8 +159,13 @@ var app = {
       },
 
       success: function (data) {
-        console.log('Messages fetched!');
         window.filtered = data;
+        // var numBlocked = window.unfiltered.results.length - window.filtered.results.length;
+        // console.log('Messages fetched!\n' + numBlocked + ' message(s) blocked!');
+        // if(numBlocked === 0 && zxc.foo.length !== 0) {
+        //   zxc.clear();
+        //   zxc.foo = s({});
+        // }
         $('#chats').empty();
         data.results.forEach(function (x) {
           app.addMessage(x);
@@ -187,11 +188,15 @@ var app = {
   addMessage: function (messageObj, id) {
     var post = $(
       '<div class="chat ' + messageObj.roomname.split(' ').join('_').toUpperCase() + '" id=' + messageObj.objectId + '></div>');
-    var user = $('<div class="username">' + messageObj.username + '</div>');
-    var message = $('<div class="messageText">' + messageObj.text + '</div>');
+    var user = $('<div class="username"></div>');
+    var message = $('<div class="messageText"></div>');
+    var messageText = document.createTextNode(messageObj.text);
+    var userText = document.createTextNode(messageObj.username);
     app.addRoom(messageObj.roomname);
     post.prepend(user);
     post.append(message);
+    user.append(userText);
+    message.append(messageText);
     $('#chats').append(post);
   },
 
@@ -222,6 +227,7 @@ $(document).ready(function () {
 
   $('#submit').keypress(function (e) {
     if (e.which === 13) {
+      e.preventDefault;
       if (this.value !== '') {
         app._send(this.value);
         this.value = '';
@@ -281,8 +287,6 @@ var searchFor = function (string, obj) {
   }
   return results;
 }
-
-
 
 
 
