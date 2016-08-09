@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------//
-// Message Filter & Hacker Punisher                                  //
+// Message Filter & XSS Punisher                                  //
 //-------------------------------------------------------------------//
 // This guarantess that messages appended to the DOM aren't 
 // 100% totally stupid garbage.
@@ -9,8 +9,8 @@ var zxc = window.localStorage;
 
 if (zxc.foo === undefined) { zxc.foo = JSON.stringify({}); }
 
-var p = function (input) { return JSON.parse(input); }
-var s = function (input) { return JSON.stringify(input); }
+var p = function (input) { return JSON.parse(input); };
+var s = function (input) { return JSON.stringify(input); };
 
 var deliverRetribution = function (obj) {
   var key = obj.username + '' + obj.objectId;
@@ -46,62 +46,63 @@ var randInsult = function () {
 var sterilize = function (messageObject) {
   messageObject.username = messageObject.username || 'Anonymous';
   messageObject.roomname = messageObject.roomname || 'Lobby';
-  if (messageObject.text === undefined) { return false; };
+  if (messageObject.text === undefined) { return false; }
   if (messageObject.username === 'shawndrost') { return false; }
   if (messageObject.text.slice(0, 4).toUpperCase() === 'TROL') { return false; }
   if (messageObject.username === 'Mel Brooks') { return false; }
   if (messageObject.text === '') { return false; }
   
   if (messageObject.username.toUpperCase().indexOf('<SCRIPT') !== -1) {
-    messageObject.username = "An XSSer";
+    messageObject.username = 'An XSSer';
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
   if (messageObject.username.toUpperCase().indexOf('<IMG') !== -1) {
-    messageObject.username = "An XSSer";
+    messageObject.username = 'An XSSer';
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
-  if (messageObject.text.toUpperCase().slice(0,7) === '<SCRIPT') {
+  if (messageObject.text.toUpperCase().slice(0, 7) === '<SCRIPT') {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
-  if (messageObject.text.toUpperCase().slice(0,4) === '<IMG') {
+  if (messageObject.text.toUpperCase().slice(0, 4) === '<IMG') {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
   if (messageObject.text.toUpperCase().indexOf('<SCRIPT') !== -1) {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
   if (messageObject.text.toUpperCase().indexOf('<IMG') !== -1) {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
  
   if (messageObject.roomname.toUpperCase().indexOf('<SCRIPT') !== -1) {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
   if (messageObject.roomname.toUpperCase().indexOf('<IMG') !== -1) {
     // deliverRetribution(messageObject);
     return false;
-  };
+  }
 
   return true;
 };
-
 //===================================================================//
 
+
+
 //-------------------------------------------------------------------//
-// Friend's List Handler                                             //
+// Friend List Handler                                             //
 //-------------------------------------------------------------------//
 
 zxc.friends = zxc.friends || s({});
@@ -116,10 +117,11 @@ var addFriend = function (user) {
 var checkFriend = function (user) {
   var temp = p(zxc.friends);
   return !!temp[user];
-}
+};
 
 var updateFriends = function () {
   if (zxc.friends === '{}') {
+    var list = $('.allFriends');
     var friend = $('<div></div>');
     friend.text('You haven\'t added any friends yet!');
     list.append(friend)
